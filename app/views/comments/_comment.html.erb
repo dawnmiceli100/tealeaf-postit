@@ -1,0 +1,15 @@
+<% show_post_link ||= false %>
+
+<div class="well">
+  <p>
+    <em>"<%= comment.body %>"</em>
+    <% if show_post_link %>
+       on <%= link_to comment.post.title, post_path(comment.post) %>
+    <% end %>     
+  </p>
+  <p>
+    <span class="quiet">Posted by </span>
+    <%= link_to comment.user.username, user_path(comment.user) %>
+    <small> on <%= friendly_datetime(comment.created_at) %></small>
+  </p> 
+</div>   

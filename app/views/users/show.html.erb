@@ -1,0 +1,34 @@
+<%= render "shared/content_title", title: "Profile: #{@user.username}" %>
+
+<div class="well">
+  <dl class="dl-horizontal">
+    <dt>Username:</dt>
+    <dd><%= @user.username %></dd>
+  </dl>  
+</div>
+
+<p><strong><%= @user.username %>'s Activity</strong></p>
+
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a href="#tab1" data-toggle="tab">Posts (<%= @user.posts.count %>)</a>
+    </li>
+    <li>
+      <a href="#tab2" data-toggle="tab">Comments (<%= @user.comments.count %>)</a>
+    </li>
+  </ul>  
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab1">
+      <% @user.posts.each do |post| %>
+        <%= render "posts/post", post: post %>
+      <% end %>
+    </div>
+    <div class="tab-pane" id="tab2">
+      <% @user.comments.each do |comment| %>
+        <%= render "comments/comment", comment: comment, show_post_link: true%>
+      <% end %>
+    </div>
+  </div>    
+
+
