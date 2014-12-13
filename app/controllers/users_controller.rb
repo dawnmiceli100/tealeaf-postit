@@ -43,7 +43,7 @@ class UsersController < ApplicationController
   end
 
   def require_same_user
-    if current_user != @user_id
+    if current_user != @user
       flash[:error] = "You cannot edit another users profile."
       redirect_to root_path
     end
