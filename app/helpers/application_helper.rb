@@ -6,5 +6,8 @@ module ApplicationHelper
   def friendly_datetime(datetime)
     datetime.strftime("%B %d, %Y at %l:%M %p %Z") 
   end
-     
+
+  def friendly_date(datetime) 
+    datetime.strftime("%B %d, %Y")
+  end    
 end

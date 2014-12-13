@@ -4,6 +4,8 @@
   <dl class="dl-horizontal">
     <dt>Username:</dt>
     <dd><%= @user.username %></dd>
+    <dt>Joined:</dt>
+    <dd><%= friendly_date(@user.created_at) %></dd>
   </dl>  
 </div>
 
