@@ -2,6 +2,7 @@ class PostsController < ApplicationController
 
   before_action :set_post, only: [:show, :edit, :update, :vote] 
   before_action :require_user, except: [:index, :show]
+  before_action :require_same_user, only: [:edit, :update]
 
   def index
     @posts = Post.all.sort_by {|x| x.total_votes}.reverse
@@ -41,12 +42,32 @@ class PostsController < ApplicationController
 
   def vote
     vote = Vote.create(voteable: @post, user: current_user, vote: params[:vote])
-    if vote.valid?
-      flash[:notice] = "Your vote was counted."
-    else
-      flash[:alert] = "You have already voted for #{@post.title}."  
-    end
-    redirect_to :back  
+    
+    # redirect_to :back for html
+    # use the response_to block below for ajaxified voting
+    respond_to do |format|
+      format.html do
+        if vote.valid?
+          flash[:notice] = "Your vote was counted." 
+        else
+          flash[:alert] = "You have already voted for #{@post.title}." 
+        end
+
+        redirect_to :back 
+      end
+           
+      format.js  do #this will render the vote.js.erb template
+        if vote.valid?
+          @type = "notice"
+          @name = "success"
+          @msg = "Your vote was counted."
+        else
+          @type = "alert"
+          @name = "error" 
+          @msg = "You have already voted for #{@post.title}."  
+        end
+      end 
+    end    
   end  
     
   private
@@ -56,8 +77,15 @@ class PostsController < ApplicationController
   end  
 
   def set_post
-    @post = Post.find(params[:id])
+    @post = Post.find_by(slug: params[:id])
   end  
+
+  def require_same_user
+    if !logged_in? || (logged_in? && !current_user.admin? && (current_user != @post.user))
+      flash[:error] = "You cannot edit another users post."
+      redirect_to root_path
+    end
+  end    
 
 end
 

@@ -1,0 +1,4 @@
+$('#comment_<%= @comment.id %>_votes').html('<%= @comment.total_votes %> votes');
+
+/* Add flash message to say vote was counted or user already voted */
+$('#flash-messages').html('<div class="alert alert-<%= @name %>"><a class="close" data-dismiss="alert">&#215;</a><div id="flash_<%= @type %>"> <%= @msg  %></div></div>');
